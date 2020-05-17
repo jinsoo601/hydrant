@@ -1,39 +1,24 @@
 import React from 'react';
-import './App.css';
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import Post from "./components/Post";
+import { ThemeProvider } from 'react-jss';
+import util from './util';
 
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: `${process.env.REACT_APP_PROJECT_ID}.firebaseapp.com`,
-  databaseURL: `https://${process.env.REACT_APP_PROJECT_ID}.firebaseio.com`,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: `${process.env.REACT_APP_PROJECT_ID}.appspot.com`,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID,
-  measurementId: process.env.REACT_APP_MEASUREMENT_ID
+const theme = {
+  colorPrimary: "#36bc98",
+  textLight: "#fff",
+  textDark: "#000",
+  center: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  }
 }
-firebase.initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
 type Post = {
+  id: string;
   content: string;
-  timestamp: Date;
+  timestamp: number;
   ipAddress: string;
-};
-
-const getClientIpAddress = (): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const req = new XMLHttpRequest();
-    req.addEventListener("load", (event) => {
-      resolve(req.response);
-    });
-    req.addEventListener("error", () => {
-      reject(new Error("Couldn't get IP Address"));
-    });
-    req.open("GET", "https://api6.ipify.org");
-    req.send();
-  });
 };
 
 const App: React.FC = () => {
@@ -42,52 +27,36 @@ const App: React.FC = () => {
   const [posts, setPosts] = React.useState<Post[]>([]);
 
   React.useEffect(() => {
-    getClientIpAddress()
-      .then((ipAddress) => {
-        setIpAddress(ipAddress);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    util.getClientIpAddress()
+      .then(setIpAddress)
+      .catch(console.error);
   }, []);
 
   React.useEffect(() => {
     if (!ipAddress) return;
-    db.collection("posts").where("ipAddress", "==", ipAddress).onSnapshot((snapshot) => {
-      const _posts: Post[] = [];
-      snapshot.forEach((doc) => {
-        _posts.push(doc.data() as Post);
-      });
-      setPosts(_posts);
-    });
-  }, [ipAddress])
+    util.getAndSetPostsByIpAddress(ipAddress, setPosts);
+  }, [ipAddress]);
 
   const onPost = () => {
     if (!value) return;
-    setValue("");
-    db.collection("posts").add({
-      content: value,
-      timestamp: Date.now(),
-      ipAddress
+    util.createPost(value, ipAddress).then(() => {
+      setValue("");
     });
   }
 
   return (
-    <div className="App">
-      <input
-        style={{ border: "1px solid black" }}
-        value={value}
-        onChange={e => setValue(e.target.value)}
-      />
-      <button onClick={onPost}>Post</button>
-      {posts.map(post => (
-        <div style={{ border: "1px solid black" }} key={`${post.timestamp}`}>
-          <p>{post.content}</p>
-          <p>{post.timestamp}</p>
-        </div>
-      ))}
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <input
+          style={{ border: "1px solid black" }}
+          value={value}
+          onChange={e => setValue(e.target.value)}
+        />
+        <button onClick={onPost}>Post</button>
+        {posts.map(post => <Post key={post.id} {...post} />)}
+      </div>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
