@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import Post from "./components/Post";
-import { ThemeProvider } from 'react-jss';
-import util from './util';
+import { ThemeProvider } from "react-jss";
+import util from "./util";
 
 const theme = {
   colorPrimary: "#36bc98",
@@ -11,8 +11,9 @@ const theme = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
-  }
-}
+  },
+  topBarHeight: 10
+};
 
 type Post = {
   id: string;
@@ -46,7 +47,7 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <input
           style={{ border: "1px solid black" }}
           value={value}
