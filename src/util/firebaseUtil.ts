@@ -29,7 +29,7 @@ export const getAndSetPostsByIpAddress = (
   ipAddress: string,
   setPosts: SetState<Post[]>
 ): void => {
-  db.collection("posts").where("ipAddress", "==", ipAddress).onSnapshot((snapshot) => {
+  db.collection("posts").where("ipAddress", "==", ipAddress).orderBy("timestamp", "desc").onSnapshot((snapshot) => {
     const posts: Post[] = [];
     snapshot.forEach((doc) => {
       posts.push({ id: doc.id, ...doc.data()} as Post);
