@@ -12,6 +12,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
     flex: 1,
     borderRadius: "0px 7px 7px 7px",
     backgroundColor: "white",
+    minWidth: 0,
+    wordBreak: "break-word",
     boxShadow: {
       x: 0,
       y: 0,

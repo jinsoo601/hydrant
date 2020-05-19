@@ -5,9 +5,10 @@ import PostTimeLabel from "./PostTimeLabel";
 import TimeContentDivider from "./TimeContentDivider";
 
 const useStyles = createUseStyles({
-  container: {
+  postContainer: {
     display: "flex",
-    width: "80%"
+    width: "80%",
+    margin: "0 auto"
   }
 });
 
@@ -21,7 +22,7 @@ const Post: React.FC<Props> = (props) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.container}>
+    <div className={classes.postContainer}>
       <PostTimeLabel timestamp={timestamp} />
       <TimeContentDivider />
       <PostContent content={content} />

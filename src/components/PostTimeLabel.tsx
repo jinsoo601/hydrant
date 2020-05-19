@@ -17,8 +17,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
     backgroundColor: theme.colorPrimary,
     color: theme.textLight,
     fontSize: 10,
+    fontWeight: 600,
     borderRadius: "3px 0px 3px 3px",
-    ...theme.center
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   },
 }));
 

@@ -1,19 +1,23 @@
 import React from "react";
+import { createUseStyles, ThemeProvider } from "react-jss";
 import Post from "./components/Post";
-import { ThemeProvider } from "react-jss";
+import Header from "./components/Header";
+import Input from "./components/Input";
 import util from "./util";
+import theme from "./theme";
 
-const theme = {
-  colorPrimary: "#36bc98",
-  textLight: "#fff",
-  textDark: "#000",
-  center: {
+const useStyles = createUseStyles({
+  container: {
+    height: "100%",
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
+    flexDirection: "column"
   },
-  topBarHeight: 10
-};
+  postList: {
+    flex: 1,
+    overflow: "auto",
+    paddingBottom: 10
+  }
+});
 
 type Post = {
   id: string;
@@ -23,9 +27,9 @@ type Post = {
 };
 
 const App: React.FC = () => {
-  const [value, setValue] = React.useState("");
   const [ipAddress, setIpAddress] = React.useState("");
   const [posts, setPosts] = React.useState<Post[]>([]);
+  const classes = useStyles();
 
   React.useEffect(() => {
     util.getClientIpAddress()
@@ -38,23 +42,14 @@ const App: React.FC = () => {
     util.getAndSetPostsByIpAddress(ipAddress, setPosts);
   }, [ipAddress]);
 
-  const onPost = () => {
-    if (!value) return;
-    util.createPost(value, ipAddress).then(() => {
-      setValue("");
-    });
-  }
-
   return (
     <ThemeProvider theme={theme}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <input
-          style={{ border: "1px solid black" }}
-          value={value}
-          onChange={e => setValue(e.target.value)}
-        />
-        <button onClick={onPost}>Post</button>
-        {posts.map(post => <Post key={post.id} {...post} />)}
+      <div className={classes.container}>
+        <Header ipAddress={ipAddress} />
+        <div className={classes.postList}>
+          {posts.map(post => <Post key={post.id} {...post} />)}
+        </div>
+        <Input ipAddress={ipAddress} />
       </div>
     </ThemeProvider>
   );
