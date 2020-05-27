@@ -1,8 +1,10 @@
 import { getClientIpAddress } from "./ipUtil";
-import { getAndSetPostsByIpAddress, createPost } from "./firebaseUtil";
+import { createPost, getBucketIds, getCurrentBucket, getPostsInBucket } from "./firebaseUtil";
 
 export default {
   getClientIpAddress,
-  getAndSetPostsByIpAddress,
-  createPost
+  createPost,
+  getBucketIds,
+  getCurrentBucket,
+  getPostsInBucket
 }

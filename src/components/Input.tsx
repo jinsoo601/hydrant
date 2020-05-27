@@ -54,18 +54,18 @@ const useStyles = createUseStyles((
 }));
 
 type Props = {
-  ipAddress: string;
+  bucketId: string;
 };
 
 const Input: React.FC<Props> = (props) => {
-  const { ipAddress } = props;
+  const { bucketId } = props;
   const inputRef = React.useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const classes = useStyles({ theme });
 
   const onPost = () => {
-    if (inputRef.current && inputRef.current.textContent) {
-      util.createPost(inputRef.current.textContent, ipAddress).then(() => {
+    if (inputRef.current && inputRef.current.textContent && bucketId) {
+      util.createPost(inputRef.current.textContent, bucketId).then(() => {
         inputRef.current!.textContent = "";
       });
     }
