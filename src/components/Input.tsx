@@ -4,7 +4,8 @@ import util from "../util";
 
 type Theme = {
   colorPrimary: string,
-  textLight: string
+  textLight: string,
+  hoverPrimary: string
 };
 
 const useStyles = createUseStyles((
@@ -49,7 +50,11 @@ const useStyles = createUseStyles((
     color: theme.textLight,
     fontWeight: 600,
     border: "none",
-    outline: "none"
+    outline: "none",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: theme.hoverPrimary
+    }
   }
 }));
 
@@ -71,12 +76,23 @@ const Input: React.FC<Props> = (props) => {
     }
   }
 
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") e.preventDefault();
+  }
+
+  const onEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (e.key === "Enter") onPost();
+  };
+
   return (
     <div className={classes.inputContainer}>
       <div
         className={classes.input}
         contentEditable
         ref={inputRef}
+        onKeyDown={onKeyDown}
+        onKeyUp={onEnter}
       />
       <button onClick={onPost} className={classes.submitButton}>
         Post
