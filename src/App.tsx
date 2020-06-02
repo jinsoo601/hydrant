@@ -3,6 +3,7 @@ import { createUseStyles, ThemeProvider } from "react-jss";
 import Header from "./components/Header";
 import Input from "./components/Input";
 import PostDateChunk from "./components/PostDateChunk";
+import LoadButton from "./components/LoadButton";
 import util from "./util";
 import theme from "./theme";
 
@@ -92,7 +93,7 @@ const App: React.FC = () => {
         <div className={classes.postList} ref={listContainerRef}>
           {
             bucketIds.indexOf(lastBucketId) > 0 &&
-            <button onClick={loadOlderPosts}>Load more posts</button>
+            <LoadButton onClick={loadOlderPosts} />
           }
           {
             util.chunkPostsByDate([...olderPosts, ...posts]).map((chunk) => (
