@@ -7,7 +7,10 @@ const useStyles = createUseStyles({
     width: "80%",
     margin: "0 auto",
     borderBottom: "1px solid gainsboro",
-    padding: 10
+    padding: 10,
+    position: "sticky",
+    top: 0,
+    backgroundColor: "white"
   }
 });
 
