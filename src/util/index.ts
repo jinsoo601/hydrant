@@ -1,10 +1,6 @@
 import { getClientIpAddress } from "./ipUtil";
 import { createPost, getBucketIds, getCurrentBucket, getPostsInBucket } from "./firebaseUtil";
-
-type Post = {
-  content: string;
-  timestamp: number;
-};
+import { Post } from "../types";
 
 const chunkPostsByDate = (
   posts: Post[]

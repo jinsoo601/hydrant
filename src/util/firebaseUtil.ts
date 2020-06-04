@@ -2,6 +2,7 @@ import React from "react";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import Hashids from "hashids";
+import { Post } from "../types";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -19,11 +20,6 @@ const db = firebase.firestore();
 const ipHash = new Hashids("TheHydrant IP", 32);
 const countHash = new Hashids("TheHydrant Full", 8);
 const bucketSize = 20;
-
-type Post = {
-  content: string;
-  timestamp: number;
-}
 
 type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 

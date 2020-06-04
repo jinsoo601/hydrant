@@ -1,12 +1,7 @@
 import React from "react";
 import { useTheme, createUseStyles } from "react-jss";
 import util from "../util";
-
-type Theme = {
-  colorPrimary: string,
-  textLight: string,
-  hoverPrimary: string
-};
+import { Theme } from "../types";
 
 const useStyles = createUseStyles((
   theme: Theme,

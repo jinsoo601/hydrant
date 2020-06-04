@@ -1,11 +1,12 @@
 import React from "react";
 import Post from "./Post";
 import { createUseStyles } from "react-jss";
+import { Post as PostType } from "../types";
 
 const useStyles = createUseStyles({
   dateLabel: {
     width: "80%",
-    margin: "0 auto",
+    margin: "5px auto 0px",
     borderBottom: "1px solid gainsboro",
     padding: 10,
     position: "sticky",
@@ -14,14 +15,9 @@ const useStyles = createUseStyles({
   }
 });
 
-type Post = {
-  content: string;
-  timestamp: number;
-};
-
 type Props = {
   date: string;
-  posts: Post[]
+  posts: PostType[]
 };
 
 const PostDateChunk: React.FC<Props> = (props) => {

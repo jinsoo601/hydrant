@@ -6,6 +6,7 @@ import PostDateChunk from "./components/PostDateChunk";
 import LoadButton from "./components/LoadButton";
 import util from "./util";
 import theme from "./theme";
+import { Post } from "./types";
 
 const useStyles = createUseStyles({
   container: {
@@ -20,11 +21,6 @@ const useStyles = createUseStyles({
   }
 });
 
-type Post = {
-  content: string;
-  timestamp: number;
-};
-
 const App: React.FC = () => {
   const [ipAddress, setIpAddress] = React.useState("");
   const [lastBucketId, setLastBucketId] = React.useState(""); // used for fetching older posts
@@ -38,7 +34,13 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     util.getClientIpAddress()
-      .then(setIpAddress)
+      .then((ipAddress) => {
+        setIpAddress(ipAddress);
+        return util.getBucketIds(ipAddress, setBucketIds);
+      })
+      .then((unsubscribe) => {
+        unsubBucketsByIpRef.current = unsubscribe;
+      })
       .catch(console.error);
 
     return () => {
@@ -48,18 +50,7 @@ const App: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if (!ipAddress) return;
-    util.getBucketIds(ipAddress, setBucketIds).then((unsubscribe) => {
-      unsubBucketsByIpRef.current = unsubscribe;
-    });
-  }, [ipAddress]);
-
-  React.useEffect(() => {
     if (!bucketIds.length) return;
-    unsubCurrentBucketRef.current(); // unsubscribe from previous bucket
-    setOlderPosts([...olderPosts, ...posts]);
-    setPosts([]);
-    const currentBucketId = bucketIds[bucketIds.length - 2];
     if (!lastBucketId && bucketIds.length > 2) {
       const id = bucketIds[bucketIds.length - 3];
       util.getPostsInBucket(id).then((res) => {
@@ -67,6 +58,10 @@ const App: React.FC = () => {
         setLastBucketId(id);
       });
     }
+    unsubCurrentBucketRef.current(); // unsubscribe from previous bucket
+    setOlderPosts([...olderPosts, ...posts]);
+    setPosts([]);
+    const currentBucketId = bucketIds[bucketIds.length - 2];
     const unsubscribe = util.getCurrentBucket(currentBucketId, setPosts);
     unsubCurrentBucketRef.current = unsubscribe;
   }, [bucketIds]);

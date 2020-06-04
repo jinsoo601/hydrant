@@ -1,10 +1,6 @@
 import React from "react";
 import { useTheme, createUseStyles } from "react-jss";
-
-type Theme = {
-  colorPrimary: string,
-  hoverPrimary: string
-};
+import { Theme } from "../types";
 
 const useStyles = createUseStyles((theme: Theme) => ({
   loadButtonWrapper: {
